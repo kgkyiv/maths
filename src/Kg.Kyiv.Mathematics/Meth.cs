@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Kg.Kyiv.Math;
+namespace Kg.Kyiv.Mathematics;
 
 public static class Meth
 {

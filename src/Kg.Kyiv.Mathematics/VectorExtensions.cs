@@ -2,7 +2,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 
-namespace Kg.Kyiv.Math;
+namespace Kg.Kyiv.Mathematics;
 
 public static unsafe class VectorExtensions
 {

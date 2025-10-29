@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="src/Kg.Kyiv.Math.Test/Kg.Kyiv.Math.Test.csproj" />
-  <Project Path="src/Kg.Kyiv.Math/Kg.Kyiv.Math.csproj" />
+  <Project Path="src/Kg.Kyiv.Mathematics.Test/Kg.Kyiv.Mathematics.Test.csproj" />
+  <Project Path="src/Kg.Kyiv.Mathematics/Kg.Kyiv.Mathematics.csproj" />
 </Solution>

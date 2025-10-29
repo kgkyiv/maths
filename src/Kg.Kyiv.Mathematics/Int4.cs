@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
 
-namespace Kg.Kyiv.Math;
+namespace Kg.Kyiv.Mathematics;
 
 // TODO: ISpanFormattable
 [StructLayout(LayoutKind.Sequential, Size = 16)]
