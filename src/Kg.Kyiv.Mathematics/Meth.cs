@@ -4,9 +4,6 @@ namespace Kg.Kyiv.Mathematics;
 
 public static class Meth
 {
-    // this is scuffed because we can't define Half constants
-    private static readonly Half HalfRadiansPerDegree = Half.Pi / (Half)180.0f;
-
     // Meth.Min >>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static sbyte Min(sbyte x, sbyte y) => x < y ? x : y;
