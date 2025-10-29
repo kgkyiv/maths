@@ -82,7 +82,7 @@ public struct Int3 : IEquatable<Int3>, IFormattable
 
         if (array.Length - index < Count)
         {
-            throw new ArgumentOutOfRangeException(nameof(array));
+            throw new ArgumentException("Destination is too short", nameof(array));
         }
 
         Unsafe.WriteUnaligned(ref Unsafe.As<int, byte>(ref array[index]), this);
@@ -93,7 +93,7 @@ public struct Int3 : IEquatable<Int3>, IFormattable
     {
         if (destination.Length < Count)
         {
-            throw new ArgumentOutOfRangeException(nameof(destination));
+            throw new ArgumentException("Destination is too short", nameof(destination));
         }
 
         Unsafe.WriteUnaligned(ref Unsafe.As<int, byte>(ref MemoryMarshal.GetReference(destination)), this);
@@ -109,6 +109,31 @@ public struct Int3 : IEquatable<Int3>, IFormattable
 
         Unsafe.WriteUnaligned(ref Unsafe.As<int, byte>(ref MemoryMarshal.GetReference(destination)), this);
         return true;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Equals(Int3 other)
+    {
+        return this.AsVector128Unsafe().Equals(other.AsVector128Unsafe());
+    }
+
+    public readonly override bool Equals(object? obj)
+    {
+        return obj is Int3 other && Equals(other);
+    }
+
+    public readonly override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y, Z);
+    }
+
+    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
+    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
+
+    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
+    {
+        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}{separator} {Z.ToString(format, formatProvider)}>";
     }
 
     public static Int3 MinValue => Create(int.MinValue);
@@ -212,28 +237,4 @@ public struct Int3 : IEquatable<Int3>, IFormattable
     public static Int3 Multiply(int left, Int3 right) => left * right;
     public static Int3 Negate(Int3 value) => -value;
     public static Int3 Subtract(Int3 left, Int3 right) => left - right;
-
-    public readonly bool Equals(Int3 other)
-    {
-        return this.AsVector128Unsafe().Equals(other.AsVector128Unsafe());
-    }
-
-    public readonly override bool Equals(object? obj)
-    {
-        return obj is Int3 other && Equals(other);
-    }
-
-    public readonly override int GetHashCode()
-    {
-        return HashCode.Combine(X, Y, Z);
-    }
-
-    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
-    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
-
-    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
-    {
-        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
-        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}{separator} {Z.ToString(format, formatProvider)}>";
-    }
 }

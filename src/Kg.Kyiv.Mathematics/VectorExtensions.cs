@@ -65,6 +65,20 @@ public static unsafe class VectorExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Double2 AsDouble2(this Vector256<double> value)
+    {
+        ref byte address = ref Unsafe.As<Vector256<double>, byte>(ref value);
+        return Unsafe.ReadUnaligned<Double2>(ref address);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Double3 AsDouble3(this Vector256<double> value)
+    {
+        ref byte address = ref Unsafe.As<Vector256<double>, byte>(ref value);
+        return Unsafe.ReadUnaligned<Double3>(ref address);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Double4 AsDouble4(this Vector256<double> value)
     {
         return Unsafe.BitCast<Vector256<double>, Double4>(value);

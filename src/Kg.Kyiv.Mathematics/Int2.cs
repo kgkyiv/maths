@@ -105,6 +105,31 @@ public struct Int2 : IEquatable<Int2>, IFormattable
         return true;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Equals(Int2 other)
+    {
+        return this.AsVector128Unsafe().Equals(other.AsVector128Unsafe());
+    }
+
+    public readonly override bool Equals(object? obj)
+    {
+        return obj is Int2 other && Equals(other);
+    }
+
+    public readonly override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y);
+    }
+
+    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
+    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
+
+    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
+    {
+        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}>";
+    }
+
     public static Int2 MinValue => Create(int.MinValue);
     public static Int2 MaxValue => Create(int.MaxValue);
     public static Int2 One => Create(1);
@@ -151,7 +176,8 @@ public struct Int2 : IEquatable<Int2>, IFormattable
     public static Int2 Clamp(Int2 value, Int2 min, Int2 max) => Vector128.Clamp(value.AsVector128Unsafe(), min.AsVector128Unsafe(), max.AsVector128Unsafe()).AsInt2();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Int2 ClampNative(Int2 value, Int2 min, Int2 max) => Vector128.ClampNative(value.AsVector128Unsafe(), min.AsVector128Unsafe(), max.AsVector128Unsafe()).AsInt2();
+    public static Int2 ClampNative(Int2 value, Int2 min, Int2 max) =>
+        Vector128.ClampNative(value.AsVector128Unsafe(), min.AsVector128Unsafe(), max.AsVector128Unsafe()).AsInt2();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Int2 CopySign(Int2 value, Int2 sign) => Vector128.CopySign(value.AsVector128Unsafe(), sign.AsVector128Unsafe()).AsInt2();
@@ -165,7 +191,7 @@ public struct Int2 : IEquatable<Int2>, IFormattable
     {
         if (values.Length < Count)
         {
-            throw new ArgumentOutOfRangeException(nameof(values));
+            throw new ArgumentException(nameof(values));
         }
 
         return Unsafe.ReadUnaligned<Int2>(ref Unsafe.As<int, byte>(ref MemoryMarshal.GetReference(values)));
@@ -197,28 +223,4 @@ public struct Int2 : IEquatable<Int2>, IFormattable
     public static Int2 Multiply(int left, Int2 right) => left * right;
     public static Int2 Negate(Int2 value) => -value;
     public static Int2 Subtract(Int2 left, Int2 right) => left - right;
-
-    public readonly bool Equals(Int2 other)
-    {
-        return this.AsVector128Unsafe().Equals(other.AsVector128Unsafe());
-    }
-
-    public readonly override bool Equals(object? obj)
-    {
-        return obj is Int2 other && Equals(other);
-    }
-
-    public readonly override int GetHashCode()
-    {
-        return HashCode.Combine(X, Y);
-    }
-
-    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
-    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
-
-    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
-    {
-        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
-        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}>";
-    }
 }

@@ -54,6 +54,31 @@ public struct Int4 : IEquatable<Int4>, IFormattable
     public readonly void CopyTo(int[] array, int index) => this.AsVector128().CopyTo(array, index);
     public readonly void CopyTo(Span<int> destination) => this.AsVector128().CopyTo(destination);
     public readonly bool TryCopyTo(Span<int> destination) => this.AsVector128().TryCopyTo(destination);
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Equals(Int4 other)
+    {
+        return this.AsVector128().Equals(other.AsVector128());
+    }
+
+    public readonly override bool Equals(object? obj)
+    {
+        return obj is Int4 other && Equals(other);
+    }
+
+    public readonly override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y, Z, W);
+    }
+
+    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
+    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
+
+    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
+    {
+        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}{separator} {Z.ToString(format, formatProvider)}{separator} {W.ToString(format, formatProvider)}>";
+    }
 
     public static Int4 MinValue => Create(int.MinValue);
     public static Int4 MaxValue => Create(int.MaxValue);
@@ -152,28 +177,4 @@ public struct Int4 : IEquatable<Int4>, IFormattable
     public static Int4 Multiply(int left, Int4 right) => left * right;
     public static Int4 Negate(Int4 value) => -value;
     public static Int4 Subtract(Int4 left, Int4 right) => left - right;
-
-    public readonly bool Equals(Int4 other)
-    {
-        return this.AsVector128().Equals(other.AsVector128());
-    }
-
-    public readonly override bool Equals(object? obj)
-    {
-        return obj is Int4 other && Equals(other);
-    }
-
-    public readonly override int GetHashCode()
-    {
-        return HashCode.Combine(X, Y, Z, W);
-    }
-
-    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
-    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
-
-    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
-    {
-        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
-        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}{separator} {Z.ToString(format, formatProvider)}{separator} {W.ToString(format, formatProvider)}>";
-    }
 }

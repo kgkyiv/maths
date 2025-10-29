@@ -43,6 +43,39 @@ public struct Double4 : IEquatable<Double4>, IFormattable
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         set => this = this.AsVector256().WithElement(index, value).AsDouble4();
     }
+    
+    public readonly void CopyTo(double[] array) => this.AsVector256().CopyTo(array);
+    public readonly void CopyTo(double[] array, int index) => this.AsVector256().CopyTo(array, index);
+    public readonly void CopyTo(Span<double> destination) => this.AsVector256().CopyTo(destination);
+    public readonly bool TryCopyTo(Span<double> destination) => this.AsVector256().TryCopyTo(destination);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Equals(Double4 other)
+    {
+        return this.AsVector256().Equals(other.AsVector256());
+    }
+
+    public readonly override bool Equals(object? obj)
+    {
+        return obj is Double4 other && Equals(other);
+    }
+
+    public readonly override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y, Z, W);
+    }
+
+    public readonly double Length() => double.Sqrt(LengthSquared());
+    public readonly double LengthSquared() => Dot(this, this);
+    
+    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
+    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
+
+    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
+    {
+        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}{separator} {Z.ToString(format, formatProvider)}{separator} {W.ToString(format, formatProvider)}>";
+    }
 
     public static Double4 E => Create(double.E);
     public static Double4 Epsilon => Create(double.Epsilon);
@@ -222,36 +255,4 @@ public struct Double4 : IEquatable<Double4>, IFormattable
     public static Double4 Subtract(Double4 left, Double4 right) => left - right;
 
     public static Double4 Truncate(Double4 vector) => Vector256.Truncate(vector.AsVector256()).AsDouble4();
-
-    public readonly void CopyTo(double[] array) => this.AsVector256().CopyTo(array);
-    public readonly void CopyTo(double[] array, int index) => this.AsVector256().CopyTo(array, index);
-    public readonly void CopyTo(Span<double> destination) => this.AsVector256().CopyTo(destination);
-    public readonly bool TryCopyTo(Span<double> destination) => this.AsVector256().TryCopyTo(destination);
-
-    public readonly bool Equals(Double4 other)
-    {
-        return this.AsVector256().Equals(other.AsVector256());
-    }
-
-    public readonly override bool Equals(object? obj)
-    {
-        return obj is Double4 other && Equals(other);
-    }
-
-    public readonly override int GetHashCode()
-    {
-        return HashCode.Combine(X, Y, Z, W);
-    }
-
-    public readonly double Length() => double.Sqrt(LengthSquared());
-    public readonly double LengthSquared() => Dot(this, this);
-    
-    public readonly override string ToString() => ToString("G", CultureInfo.CurrentCulture);
-    public readonly string ToString(string? format) => ToString(format, CultureInfo.CurrentCulture);
-
-    public readonly string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider)
-    {
-        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
-        return $"<{X.ToString(format, formatProvider)}{separator} {Y.ToString(format, formatProvider)}{separator} {Z.ToString(format, formatProvider)}{separator} {W.ToString(format, formatProvider)}>";
-    }
 }
