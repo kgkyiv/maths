@@ -1,8 +1,8 @@
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using Kg.Kyiv.Mathematics.Numerics;
 
-namespace Kg.Kyiv.Mathematics;
+namespace Kg.Kyiv.Mathematics.Extensions;
 
 public static class VectorExtensions
 {

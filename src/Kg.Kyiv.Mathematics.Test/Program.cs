@@ -1,8 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using Kg.Kyiv.Mathematics;
+using Kg.Kyiv.Mathematics.Numerics;
 
 Console.WriteLine(Meth.WrapDegrees(0.0));
 Console.WriteLine(Meth.WrapDegrees(180.0));

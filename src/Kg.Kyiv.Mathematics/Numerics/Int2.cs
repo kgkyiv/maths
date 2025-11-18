@@ -3,8 +3,9 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using Kg.Kyiv.Mathematics.Extensions;
 
-namespace Kg.Kyiv.Mathematics;
+namespace Kg.Kyiv.Mathematics.Numerics;
 
 // TODO: ISpanFormattable
 [StructLayout(LayoutKind.Sequential, Size = 8)]
