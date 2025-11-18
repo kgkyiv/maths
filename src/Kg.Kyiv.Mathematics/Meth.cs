@@ -1,8 +1,9 @@
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace Kg.Kyiv.Mathematics;
 
-public static class Meth
+public static partial class Meth
 {
     // Meth.Min >>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -204,10 +205,10 @@ public static class Meth
     public static bool IsZero(Half x) => Half.Abs(x) < Half.Epsilon;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsZero(float x) => float.Abs(x) < float.Epsilon;
+    public static bool IsZero(float x) => Math.Abs(x) < float.Epsilon;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsZero(double x) => double.Abs(x) < double.Epsilon;
+    public static bool IsZero(double x) => Math.Abs(x) < double.Epsilon;
     // <<
 
     // Meth.SafeDiv >>
