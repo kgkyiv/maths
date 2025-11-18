@@ -4,85 +4,113 @@ using System.Runtime.Intrinsics;
 
 namespace Kg.Kyiv.Mathematics;
 
-public static unsafe class VectorExtensions
+public static class VectorExtensions
 {
-    public static Vector128<int> AsVector128(this Int2 value) => Int4.Create(value, 0, 0).AsVector128();
-    public static Vector128<int> AsVector128(this Int3 value) => Int4.Create(value, 0).AsVector128();
-    public static Vector128<int> AsVector128(this Int4 value) => Unsafe.BitCast<Int4, Vector128<int>>(value);
-
-    [SkipLocalsInit]
-    public static Vector128<int> AsVector128Unsafe(this Int2 value)
+    extension(Int2 value)
     {
-        Unsafe.SkipInit(out Vector128<int> result);
-        Unsafe.WriteUnaligned(ref Unsafe.As<Vector128<int>, byte>(ref result), value);
-        return result;
+        public Vector128<int> AsVector128() => Int4.Create(value, 0, 0).AsVector128();
+
+        [SkipLocalsInit]
+        public Vector128<int> AsVector128Unsafe()
+        {
+            Unsafe.SkipInit(out Vector128<int> result);
+            Unsafe.WriteUnaligned(ref Unsafe.As<Vector128<int>, byte>(ref result), value);
+            return result;
+        }
     }
 
-    [SkipLocalsInit]
-    public static Vector128<int> AsVector128Unsafe(this Int3 value)
+    extension(Int3 value)
     {
-        Unsafe.SkipInit(out Vector128<int> result);
-        Unsafe.WriteUnaligned(ref Unsafe.As<Vector128<int>, byte>(ref result), value);
-        return result;
+        public Vector128<int> AsVector128() => Int4.Create(value, 0).AsVector128();
+
+        [SkipLocalsInit]
+        public Vector128<int> AsVector128Unsafe()
+        {
+            Unsafe.SkipInit(out Vector128<int> result);
+            Unsafe.WriteUnaligned(ref Unsafe.As<Vector128<int>, byte>(ref result), value);
+            return result;
+        }
     }
 
-    [SkipLocalsInit]
-    public static Vector256<double> AsVector256Unsafe(this Double2 value)
+    extension(Int4 value)
     {
-        Unsafe.SkipInit(out Vector256<double> result);
-        Unsafe.WriteUnaligned(ref Unsafe.As<Vector256<double>, byte>(ref result), value);
-        return result;
+        public Vector128<int> AsVector128() => Unsafe.BitCast<Int4, Vector128<int>>(value);
     }
 
-    [SkipLocalsInit]
-    public static Vector256<double> AsVector256Unsafe(this Double3 value)
+    extension(Double2 value)
     {
-        Unsafe.SkipInit(out Vector256<double> result);
-        Unsafe.WriteUnaligned(ref Unsafe.As<Vector256<double>, byte>(ref result), value);
-        return result;
+        public Vector256<double> AsVector256() => Double4.Create(value, 0.0, 0.0).AsVector256();
+
+        [SkipLocalsInit]
+        public Vector256<double> AsVector256Unsafe()
+        {
+            Unsafe.SkipInit(out Vector256<double> result);
+            Unsafe.WriteUnaligned(ref Unsafe.As<Vector256<double>, byte>(ref result), value);
+            return result;
+        }
     }
 
-    public static Vector256<double> AsVector256(this Double2 value) => Double4.Create(value, 0.0, 0.0).AsVector256();
-    public static Vector256<double> AsVector256(this Double3 value) => Double4.Create(value, 0.0).AsVector256();
-    public static Vector256<double> AsVector256(this Double4 value) => Unsafe.BitCast<Double4, Vector256<double>>(value);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Int2 AsInt2(this Vector128<int> value)
+    extension(Double3 value)
     {
-        ref byte address = ref Unsafe.As<Vector128<int>, byte>(ref value);
-        return Unsafe.ReadUnaligned<Int2>(ref address);
+        public Vector256<double> AsVector256() => Double4.Create(value, 0.0).AsVector256();
+
+        [SkipLocalsInit]
+        public Vector256<double> AsVector256Unsafe()
+        {
+            Unsafe.SkipInit(out Vector256<double> result);
+            Unsafe.WriteUnaligned(ref Unsafe.As<Vector256<double>, byte>(ref result), value);
+            return result;
+        }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Int3 AsInt3(this Vector128<int> value)
+    extension(Double4 value)
     {
-        ref byte address = ref Unsafe.As<Vector128<int>, byte>(ref value);
-        return Unsafe.ReadUnaligned<Int3>(ref address);
+        public Vector256<double> AsVector256() => Unsafe.BitCast<Double4, Vector256<double>>(value);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Int4 AsInt4(this Vector128<int> value)
+    extension(Vector128<int> value)
     {
-        return Unsafe.BitCast<Vector128<int>, Int4>(value);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Int2 AsInt2()
+        {
+            ref byte address = ref Unsafe.As<Vector128<int>, byte>(ref value);
+            return Unsafe.ReadUnaligned<Int2>(ref address);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Int3 AsInt3()
+        {
+            ref byte address = ref Unsafe.As<Vector128<int>, byte>(ref value);
+            return Unsafe.ReadUnaligned<Int3>(ref address);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Int4 AsInt4()
+        {
+            return Unsafe.BitCast<Vector128<int>, Int4>(value);
+        }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Double2 AsDouble2(this Vector256<double> value)
+    extension(Vector256<double> value)
     {
-        ref byte address = ref Unsafe.As<Vector256<double>, byte>(ref value);
-        return Unsafe.ReadUnaligned<Double2>(ref address);
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Double2 AsDouble2()
+        {
+            ref byte address = ref Unsafe.As<Vector256<double>, byte>(ref value);
+            return Unsafe.ReadUnaligned<Double2>(ref address);
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Double3 AsDouble3(this Vector256<double> value)
-    {
-        ref byte address = ref Unsafe.As<Vector256<double>, byte>(ref value);
-        return Unsafe.ReadUnaligned<Double3>(ref address);
-    }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Double3 AsDouble3()
+        {
+            ref byte address = ref Unsafe.As<Vector256<double>, byte>(ref value);
+            return Unsafe.ReadUnaligned<Double3>(ref address);
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Double4 AsDouble4(this Vector256<double> value)
-    {
-        return Unsafe.BitCast<Vector256<double>, Double4>(value);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Double4 AsDouble4()
+        {
+            return Unsafe.BitCast<Vector256<double>, Double4>(value);
+        }
     }
 }
