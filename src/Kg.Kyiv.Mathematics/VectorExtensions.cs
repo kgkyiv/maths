@@ -42,6 +42,8 @@ public static unsafe class VectorExtensions
         return result;
     }
 
+    public static Vector256<double> AsVector256(this Double2 value) => Double4.Create(value, 0.0, 0.0).AsVector256();
+    public static Vector256<double> AsVector256(this Double3 value) => Double4.Create(value, 0.0).AsVector256();
     public static Vector256<double> AsVector256(this Double4 value) => Unsafe.BitCast<Double4, Vector256<double>>(value);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

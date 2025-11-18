@@ -9,7 +9,7 @@ namespace Kg.Kyiv.Mathematics;
 [StructLayout(LayoutKind.Sequential, Size = 16)]
 public struct Double2
 {
-        internal const int Count = 2;
+    internal const int Count = 2;
 
     public double X;
     public double Y;
