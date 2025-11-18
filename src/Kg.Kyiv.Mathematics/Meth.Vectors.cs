@@ -6,6 +6,7 @@ using Kg.Kyiv.Mathematics.Numerics;
 
 namespace Kg.Kyiv.Mathematics;
 
+// this class is called Meth for a reason
 public static partial class Meth
 {
     // Meth.FloorToInt >>
